@@ -22,7 +22,7 @@
 	color:#6b6b6b;
 }
 .menu1{
-	margin-top: 7px;
+	margin-top: 5px;
  	list-style:none;
  	display: flex;
   	align-items: center;
@@ -143,7 +143,104 @@ b {
 h1 {
    text-indent:-9999px;
    margin:0 auto;
-   width:3000px;
+   width:1500px;
    height:150px;
    background:transparent url("jstlogo3.jpg") no-repeat scroll;
 }
+.stil{
+  display:flex;
+  border-radius:10px;
+}
+.tab1{
+	padding: 50px;
+}
+.tab2{
+	padding: 50px;
+}
+.tab3{
+	padding: 50px;
+}
+.tab4{
+	padding: 50px;
+}
+.table-info {
+			display: none;
+		}
+    .main-block{
+      width: 560px;
+      height: 560px;
+      margin: 30px auto;
+      border: 1px solid black;
+    }
+    .block{
+      width: 70px;
+      height: 70px;
+      float: left;
+    }
+    .black{
+      background-color: #000;
+      cursor: pointer;
+    }
+    .white{
+      background-color: #fff;
+    }
+    .bpeshka1{
+      background-image: url(i/bb1.png); 
+      background-size: cover;
+      repeat: no-repeat;
+    }
+      .wpeshka1{
+        background-image: url(i/wb1.png); 
+        background-size: cover; 
+        repeat: no-repeat;
+      }
+      .konw{
+         background-image: url(i/wb2.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .konb{
+         background-image: url(i/bb2.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .ladb{
+         background-image: url(i/bb3.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .ladw{
+         background-image: url(i/wb3.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .slonb{
+         background-image: url(i/bb4.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .slonw{
+         background-image: url(i/wb4.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .kingb{
+         background-image: url(i/bb5.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .queenb{
+         background-image: url(i/bb6.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .kingw{
+         background-image: url(i/wb5.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
+      .queenw{
+         background-image: url(i/wb6.png); 
+         background-size: cover; 
+        repeat: no-repeat;
+      }
