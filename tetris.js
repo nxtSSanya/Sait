@@ -318,7 +318,7 @@ function move(){
 						let set = document.querySelectorAll('.set');
 						let NewSet =[];
 						for(let s =0;s<set.length;++s){
-							let setCoords = [set[s].getAttribute('posX'),set[s].getAttribute('posY'),];
+							let setCoords = [set[s].getAttribute('posX'),set[s].getAttribute('posY')];
 							if(setCoords[1] > i){
 								set[s].classList.remove('set');
 								NewSet.push(document.querySelector(`[posX = "${setCoords[0]}"][posY = "${setCoords[1] - 1}"]`));
