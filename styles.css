@@ -267,6 +267,9 @@ h1 {
         bottom: 0;
         background-color: #fff;
       }
-      .figure, .set{
+      .figure{
         background-color: #FF00FF;
+      }
+      .set{
+         background-color: #FF00FF;
       }
