@@ -1,0 +1,138 @@
+Theory
+=================
+
+Creating the first mesh
+-----------------------
+The first class that I used is Triangulation
+::
+
+#include <deal.II/grid/tria.h>
+
+In second, for iterating over cells and faces i need this
+::
+
+#include <deal.II/grid/tria_accessor.h>
+#include <deal.II/grid/tria_iterator.h>
+
+So I need some functions to generate grids
+::
+
+#include <deal.II/grid/grid_generator.h>
+
+Output functions are here
+::
+
+#include <deal.II/grid/grid_out.h>
+
+And classic stream input/output of C++
+::
+
+#include <iostream>
+#include <fstream>
+
+Math lib
+::
+
+#include <cmath>
+
+All classes and functions of deal.ii in the namespace, so I use it too
+::
+
+	using namespace dealii;
+
+So, the first thing is triangulation, let`s create object of class ``Trianglulation``
+::
+
+	Triangulation<2> triangulation;
+	
+The string "<2>" after a class name indicates that this is an object that shall work in two space dimensions.
+
+Next, we want to fill the triangulation with a single cell for a square domain. The triangulation is the refined four times, to yield 4*4*4*4 = 256 cells in total
+::
+
+	GridGenerator::hyper_cube(triangulation);
+	triangulation.refine_global(4);
+	
+Then I need to get a graphical representation of the mesh to .svg file
+::
+
+	std::ofstream out("grid-1.svg");
+  	GridOut       grid_out;
+  	grid_out.write_svg(triangulation, out);
+  
+I also had an dditional task to count all lines and active lines
+::
+
+	outText<<"All lines in square are: "<<triangulation.n_lines()<<std::endl;
+	outText<<"Active lines in square are: "<<triangulation.n_active_lines()<<std::endl;
+
+``triangulation.n_lines()`` returns the total number of used lines, active or not. 
+``triangulation.n_active_lines()`` returns the total number of active lines.
+
+Creating the second mesh
+------------------------  
+Again need to define an object for a triangulation
+::
+
+	Triangulation<2> triangulation;
+
+Then fill it with a ring domain, the center is in (1,0), inner radius is 0.5, outer radius is 1.The number of circumferential cells could be adjusted automatically by this function, but we choose to set it explicitly to 10 as the last argument
+::
+
+	const Point<2> center(1, 0);
+	const double   inner_radius = 0.5, outer_radius = 1.0;
+	GridGenerator::hyper_shell(
+ 	triangulation, center, inner_radius, outer_radius, 10);
+ 	
+A loop over all cells, I`ll refine the grid if 5 steps towards the inner circle of the domain
+::
+
+	for (unsigned int step = 0; step < 5; ++step)
+	
+One of the most important features is that I only need the active cells. Active cells are those that are not further refined and the only ones that marked as "can be refine". So we use loop for all active cells.
+::
+
+	for(auto it = triangulation.active_cell_iterators().begin(); 
+	it ! = triangulation.active_cell_iterators().end();++it)
+		{
+		auto cell = *it;
+	}
+        	
+Next, we loop over all vertices of the cells. So we`re in 2D, we know that each cell has only 4 vertices. Class ``GeometryInfo`` returns an array that correct in all dimensions
+::
+
+	for (const auto v : cell->vertex_indices()){
+	
+If this cell is at the inner boundary, then at least one of its vertices must sit on the inner ring and therefore have a radial distance from the center of exactly 0.5, up to floating point accuracy. So we compute this distance, and if we find a vertex with this property, we flag this cell for later refinement. We can then also break the loop over all vertices and move on to the next cell.
+::
+
+	const double distance_from_center = center.distance(cell->vertex(v));
+	if (std::fabs(distance_from_center - inner_radius) < = 1e-6 * inner_radius)
+		{
+		cell->set_refine_flag();
+		break;
+		}
+
+Now, when we have marked all the cells that we need, it can be refined with the triangulation
+::
+
+	triangulation.execute_coarsening_and_refinement();
+	
+And the last step is writing the result mesh to ``.svg``
+::
+
+	std::ofstream out("grid-2.svg");
+	GridOut grid_out;
+	grid_out.write_svg(triangulation, out);
+	std::cout << "Grid written to grid-2.svg" << std::endl;
+ 
+And the main function contains two subfunctions, which produce the two grids
+::
+
+	int main()
+	{
+	 first_grid();
+	 second_grid();
+	}
+
+
