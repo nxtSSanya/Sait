@@ -1,7 +1,0 @@
-Output of the second grid
-=========================  
-``Active cells are: 460``
-
-``All cells are: 610``
-
-.. image:: _static/grid-2.svg
