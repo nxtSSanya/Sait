@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Building the donut &#8212; Lab_1  documentation</title>
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Output of the first grid" href="Outsq.html" />
+    <link rel="prev" title="STRUCTURE OF CODE" href="Theory.html" />
+   
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="building-the-donut">
+<h1>Building the donut<a class="headerlink" href="#building-the-donut" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="code-of-the-second-grid">
+<h2>Code of the second grid<a class="headerlink" href="#code-of-the-second-grid" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">second_grid</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">Triangulation</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">triangulation</span><span class="p">;</span>
+
+  <span class="n">const</span> <span class="n">Point</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">center</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">const</span> <span class="n">double</span>   <span class="n">inner_radius</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">outer_radius</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+  <span class="n">GridGenerator</span><span class="p">::</span><span class="n">hyper_shell</span><span class="p">(</span>
+    <span class="n">triangulation</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">inner_radius</span><span class="p">,</span> <span class="n">outer_radius</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="p">;</span> <span class="o">++</span><span class="n">step</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">cell</span> <span class="p">:</span> <span class="n">triangulation</span><span class="o">.</span><span class="n">active_cell_iterators</span><span class="p">())</span>
+        <span class="p">{</span>
+          <span class="k">for</span> <span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="n">GeometryInfo</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">::</span><span class="n">vertices_per_cell</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span>
+            <span class="p">{</span>
+              <span class="n">const</span> <span class="n">double</span> <span class="n">distance_from_center</span> <span class="o">=</span>
+                <span class="n">center</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">cell</span><span class="o">-&gt;</span><span class="n">vertex</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
+
+              <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="p">::</span><span class="n">fabs</span><span class="p">(</span><span class="n">distance_from_center</span> <span class="o">-</span> <span class="n">inner_radius</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
+                <span class="p">{</span>
+                  <span class="n">cell</span><span class="o">-&gt;</span><span class="n">set_refine_flag</span><span class="p">();</span>
+                  <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+      <span class="n">triangulation</span><span class="o">.</span><span class="n">execute_coarsening_and_refinement</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">countActive</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">countAll</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="n">auto</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">:</span> <span class="n">triangulation</span><span class="o">.</span><span class="n">active_cell_iterators</span><span class="p">()){</span>
+  <span class="o">++</span><span class="n">countActive</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">for</span><span class="p">(</span><span class="n">auto</span><span class="o">&amp;</span><span class="n">i</span><span class="p">:</span><span class="n">triangulation</span><span class="o">.</span><span class="n">cell_iterators</span><span class="p">()){</span>
+  <span class="o">++</span><span class="n">countAll</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">std</span><span class="p">::</span><span class="n">ofstream</span> <span class="n">outText</span><span class="p">(</span><span class="s2">&quot;DonutText.txt&quot;</span><span class="p">);</span>
+<span class="n">outText</span><span class="o">&lt;&lt;</span><span class="s2">&quot;      -----DONUT-----     &quot;</span><span class="o">&lt;&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="n">outText</span><span class="o">&lt;&lt;</span><span class="s2">&quot;Active cells are: &quot;</span><span class="o">&lt;&lt;</span><span class="n">countActive</span><span class="o">&lt;&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="n">outText</span><span class="o">&lt;&lt;</span><span class="s2">&quot;All cells are: &quot;</span><span class="o">&lt;&lt;</span><span class="n">countAll</span><span class="o">&lt;&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">ofstream</span> <span class="n">out</span><span class="p">(</span><span class="s2">&quot;grid-2.svg&quot;</span><span class="p">);</span>
+  <span class="n">GridOut</span>       <span class="n">grid_out</span><span class="p">;</span>
+  <span class="n">grid_out</span><span class="o">.</span><span class="n">write_svg</span><span class="p">(</span><span class="n">triangulation</span><span class="p">,</span> <span class="n">out</span><span class="p">);</span>
+
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Grid written to grid-2.svg&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Lab_1</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code.html">Building the square</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Theory.html">STRUCTURE OF CODE</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building the donut</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-of-the-second-grid">Code of the second grid</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Outsq.html">Output of the first grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Outdn.html">Output of the second grid</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Theory.html" title="previous chapter">STRUCTURE OF CODE</a></li>
+      <li>Next: <a href="Outsq.html" title="next chapter">Output of the first grid</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Alexander Nemykin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="sources/foo2.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
