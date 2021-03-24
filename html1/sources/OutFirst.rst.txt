@@ -1,4 +1,0 @@
-First sparsity pattern
-=======================
-
-.. image:: _static/sparsity_pattern1.svg
