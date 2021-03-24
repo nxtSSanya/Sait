@@ -1,0 +1,4 @@
+Second sparsity pattern
+=======================
+
+.. image:: _static/sparsity_pattern2.svg
